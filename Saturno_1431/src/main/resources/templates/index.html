@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+ xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{master.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de cursos</title>
+      </head>
+<body>
+<div layout:fragment="content">
+
+
+<div class="container mt-4">
+    <h1> Gestión de Cursos</h1>
+    <div class="alert alert-success alert-dismissible" th:if="${msgExito ne null}">
+        [[${msgExito}]]
+        <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div class="text-end">
+        <a href="/cursos/nuevo" class="btn btn-primary">Nuevo Curso</a>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID:</th>
+            <th>NRC:</th>
+            <th>Nombre:</th>
+            <th>Créditos:</th>
+            <th>Horas:</th>
+            <th>Modalidad:</th>
+            <th>Area:</th>
+            <th>Creación:</th>
+            <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="curso : ${cursos}">
+            <td th:text =${curso.id} ></td>
+            <td th:text =${curso.nrc}></td>
+            <td th:text =${curso.nombre}></td>
+            <td th:text =${curso.creditos}></td>
+            <td th:text =${curso.horas}></td>
+            <td th:text =${curso.modalidad}></td>
+            <td th:text =${curso.area}></td>
+            <td th:text =${curso.fecha_creacion}></td>
+            <td>
+                [[*{#temporals.format(curso.fecha_creacion, 'dd/MM/yyyy hh:mm a')}]]
+            </td>
+            <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                    <a th:href="@{/cursos/editar/{id}(id=*{curso.id})}" class="btn btn-primary" title="Editar Curso">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </div>
+                <div class="btn-group btn-group-sm">
+                <a onclick="eliminar(this)" href="#" class="btn btn-danger " title="Eliminar Curso">
+                    <i class="fa fa-trash"></i>
+                </a>
+                </div>
+                <form th:action="@{/cursos/eliminar/{id}(id=*{curso.id})}" method="post" class="d-none">
+
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+</div>
+    <div layout:fragment="scripts">
+        <script>
+        function eliminar(elemento){
+        var ok = confirm("Está seguro que desea eliminar este curso?")
+        if(ok){
+            elemento.nextElementSibling.submit();
+        }
+        }
+    </script>
+    </div>
+</body>
+</html>
